@@ -1,0 +1,22 @@
+{
+  "name": "hero-manager",
+  "version": "1.0.0",
+  "description": "a management tool for rpg groups",
+  "main": "index.js",
+  "dependencies": {
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Iliricon/hero-manager.git"
+  },
+  "author": "Claas Voelcker",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/Iliricon/hero-manager/issues"
+  },
+  "homepage": "https://github.com/Iliricon/hero-manager#readme"
+}
