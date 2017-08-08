@@ -1,0 +1,40 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>HeroManager</title>
+	<link rel="stylesheet" href="{% static "materialize-css/dist/css/materialize.min.css" %}">
+    </head>
+
+    <body>
+      <nav>
+        <div class="nav-wrapper">
+          <a class="brand-logo">HeroManager</a>
+          <ul class="right hide-on-med-and-down">
+	  {% if user.is_authenticated %}
+	  <!--<li><a href="">General Forums</a></li>-->
+	  <li><a href="{% url "hero:groups" %}">My Groups</a></li>
+	  <li><a href="{% url "hero:profile" %}">My Profile</a></li>
+	  <li><a href="{% url "logout" %}">Logout</a></li>
+	  {% else %}
+	  <li><a href="{% url "login" %}">Login</a></li>
+	  {% endif %}
+          </ul>
+        </div>
+      </nav>
+	{% block content %}
+	{% endblock %}
+
+    </body>
+
+  <footer style="position:fixed;left:0px;bottom:0px;width:100%;" class="page-footer">
+  <div class="footer-copyright">
+    <div class="container">
+    © 2017 Claas Völcker
+    <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+    </div>
+  </div>
+</footer>
+</html>
