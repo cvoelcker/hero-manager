@@ -130,3 +130,5 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/home/'
 
 INTERNAL_IPS = ['127.0.0.1', 'localhost', '192.168.0.1']
+
+CSRF_COOKIE_AGE=None

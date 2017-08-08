@@ -37,7 +37,10 @@ class Hero(models.Model):
     player = models.ForeignKey(User, on_delete = models.CASCADE)
     group = models.ForeignKey(Group, on_delete = models.CASCADE)
 
-    char_sheet = models.TextField()
+    char_sheet = models.TextField(
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.name

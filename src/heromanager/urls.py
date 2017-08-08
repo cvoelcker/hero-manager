@@ -17,11 +17,13 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from . import settings
+from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('^', include('django.contrib.auth.urls')),
-    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^register', views.register, name="register"),
+    url(r'^register_unsuccessfull', views.register),
     url(r'^home/', include('hero.urls')),
 ]
 
