@@ -1,81 +1,86 @@
 {% extends 'base.html' %}
 
 {% block header-includes %}
-<script>
-$(document).ready(function() {
-    Materialize.updateTextFields();
-  });
-</script>
-<script>
-function checkPass()
-{
-    //Store the password field objects into variables ...
-    var pass1 = document.getElementById('pass1');
-    var pass2 = document.getElementById('pass2');
-    //Store the Confimation Message Object ...
-    var message = document.getElementById('confirmMessage');
-    //Set the colors we will be using ...
-    var goodColor = "#66cc66";
-    var badColor = "#ff6666";
-    //Compare the values in the password field 
-    //and the confirmation field
-    if(pass1.value == pass2.value){
-        //The passwords match. 
-        //Set the color to the good color and inform
-        //the user that they have entered the correct password 
-        pass2.style.backgroundColor = goodColor;
-        message.style.color = goodColor;
-        message.innerHTML = "Passwords Match!"
-    }else{
-        //The passwords do not match.
-        //Set the color to the bad color and
-        //notify the user.
-        pass2.style.backgroundColor = badColor;
-        message.style.color = badColor;
-        message.innerHTML = "Passwords Do Not Match!"
-    }
-}  
-</script>
+    <script>
+        $(document).ready(function () {
+            Materialize.updateTextFields();
+        });
+    </script>
+    <script>
+        function checkPass() {
+            //Store the password field objects into variables ...
+            var pass1 = document.getElementById('pass1');
+            var pass2 = document.getElementById('pass2');
+            //Store the Confimation Message Object ...
+            var message = document.getElementById('confirmMessage');
+            //Set the colors we will be using ...
+            var goodColor = "#66cc66";
+            var badColor = "#ff6666";
+            //Compare the values in the password field
+            //and the confirmation field
+            if (pass1.value == pass2.value) {
+                //The passwords match.
+                //Set the color to the good color and inform
+                //the user that they have entered the correct password
+                pass2.style.backgroundColor = goodColor;
+                message.style.color = goodColor;
+                message.innerHTML = "Passwords Match!"
+            } else {
+                //The passwords do not match.
+                //Set the color to the bad color and
+                //notify the user.
+                pass2.style.backgroundColor = badColor;
+                message.style.color = badColor;
+                message.innerHTML = "Passwords Do Not Match!"
+            }
+        }
+    </script>
 {% endblock %}
 
 {% block title %}Register{% endblock %}
 
-{% block message %}{% endblock %}
+{% block message %}
+{% endblock %}
 
 {% block content %}
-<div class="container">
-<div class="row"></div>	
-    <div class="row" >
-    <form class="col s12" action="{% url 'register' %}" method="post">
-     <div class="row">
-	<div class="input-field col s12">
-          <input name="username" id="username" type="text" class="validate">
-          <label class="active" for="password">Username</label>
+    <div class="container">
+        <div class="row"></div>
+        <div class="row">
+            <form class="col s12" action="{% url 'register' %}" method="post">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="username" id="username" type="text"
+                               class="validate">
+                        <label class="active" for="password">Username</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="password1" id="password1" type="password"
+                               class="validate">
+                        <label class="active" for="password">Password</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="password2" id="password2" type="password"
+                               class="validate">
+                        <label class="active" for="password">Password</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="email" id="email" type="email"
+                               class="validate">
+                        <label class="active" for="email">Email</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <input class="waves-effect waves-light btn" type="submit"
+                           value="Register">
+                </div>
+            </form>
         </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input name="password1" id="password1" type="password" class="validate">
-          <label class="active" for="password">Password</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input name="password2" id="password2" type="password" class="validate">
-          <label class="active" for="password">Password</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input name="email" id="email" type="email" class="validate">
-          <label class="active" for="email">Email</label>
-        </div>
-      </div>
-      <div class="row">
-	<input class="waves-effect waves-light btn" type="submit" value="Register">
-      </div>
-    </form>
-  </div>
-</div>
+    </div>
 
 {% endblock %}
