@@ -4,6 +4,7 @@
   "description": "a management tool for rpg groups",
   "main": "index.js",
   "dependencies": {
+    "materialize-css": "^0.100.1"
   },
   "devDependencies": {},
   "scripts": {

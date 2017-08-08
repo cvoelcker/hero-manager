@@ -15,9 +15,9 @@ class HomeView(TemplateView):
     template_name = "base.html"
 
 
-class GroupView(LoginRequiredMixin, View):
-    def get(self, request):
-        return HttpResponse('result')
+class GroupView(LoginRequiredMixin, TemplateView):
+    template_name = 'groups_base.html'
+
 
 
 @login_required

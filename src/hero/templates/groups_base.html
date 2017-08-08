@@ -1,13 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="left">
-<nav md-tab-nav-bar>
-  <li><a md-tab-link >Stuff</a></li>
-  <li><a md-tab-link >More Stuff</a></li>
-  <li><a md-tab-link >Actual Stuff</a></li>
-</nav>
-</div>
+    It works
+{% endblock %}
 
+{% block side_bar %}
+        <ul class="collapsible" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header">First</div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="{% url "register" %}">Test</a></li>
+                        <li><a href="{% url "register" %}">Test</a></li>
+                        <li><a href="{% url "register" %}">Test</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <div class="divider"></div>
+            </li>
+            <li>
+                <div class="collapsible-header">Second</div>
+                <div class="collapsible-body">
+                    <span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            <li>
+                <div class="divider"></div>
+            </li>
+        </ul>
 
 {% endblock %}

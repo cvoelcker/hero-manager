@@ -5,13 +5,34 @@
 <html>
 <head>
     <title>HeroManager</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <script type="text/javascript"
+            src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript"
+            src="{% static "materialize-css/dist/js/materialize.min.js" %}"></script>
     <link rel="stylesheet"
           href="{% static "materialize-css/dist/css/materialize.min.css" %}">
+    <style type="text/css">
+        {% if user.is_authenticated %}
+            .wrapper {
+                padding-left: 270px;
+                padding-top: 2%
+            }
+        {% endif %}
+
+        .side-nav {
+            top: 65px;
+            width: 250px;
+        }
+    </style>
+
     {% block header-includes %}
     {% endblock %}
 </head>
 
 <body>
+
 <nav>
     <div class="nav-wrapper">
         <a class="brand-logo">HeroManager</a>
@@ -28,18 +49,44 @@
         </ul>
     </div>
 </nav>
-{% block content %}
+
+{% if user.is_authenticated %}
+    <script>
+        $(document).ready(function () {
+            // Open
+            $('.collapsible').collapsible('close', 0);
+            // Close
+        });
+    </script>
+    <ul id="slide-out" class="side-nav fixed">
+        {% block side_bar %}
+        {% endblock %}
+    </ul>
+
+    <div class="wrapper">
+        <div style="padding-left: 5%; padding-top: 1%">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+{% endif %}
+
+{% block general_content %}
 {% endblock %}
 
-</body>
-
-<footer style="position:fixed;left:0px;bottom:0px;width:100%;"
+<!--
+<footer style="position:fixed;left:0px;bottom:0px;width:100%"
         class="page-footer">
     <div class="footer-copyright">
         <div class="container">
             © 2017 Claas Völcker
-            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+            <a class="grey-text text-lighten-4 right" href="#!">More
+                Links</a>
         </div>
     </div>
 </footer>
+-->
+
+</body>
+
 </html>
