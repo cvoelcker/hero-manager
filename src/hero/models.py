@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from hero.misc import InGameDate
 from django.utils import timezone
+from hero import settings
 
 
 class Group(models.Model):
@@ -10,7 +10,15 @@ class Group(models.Model):
     other
     """
 
-    name = models.CharField(max_length=200)
+    name = models.CharField(
+        max_length=200,
+        primary_key=True)
+
+    rule_version = models.CharField(
+        max_length=20,
+        choices=settings.RULES_SUPPORTED,
+        default='DEFAULT',
+    )
 
     game_master = models.ForeignKey(
         User,
@@ -24,6 +32,8 @@ class Group(models.Model):
         User,
         related_name='gaming_group'
     )
+
+    description = models.CharField(max_length=140)
 
     def __str__(self):
         return self.name
@@ -72,8 +82,3 @@ class DiaryEntry(models.Model):
     date = models.IntegerField('in game date')
 
     entry = models.TextField("Eintrag")
-
-    def getDate(self):
-        timestamp = self.date.object
-
-        return InGameDate(timestamp)

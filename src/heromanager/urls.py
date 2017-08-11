@@ -21,9 +21,10 @@ from . import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('^', include('django.contrib.auth.urls')),
-    url(r'^register/$', views.register, name="register"),
-    url(r'^register/([a-z])/$', views.register, name="register"),
-    url(r'^home/', include('hero.urls')),
+    url(r'^', include('hero.urls')),
+    url(r'^register/$', views.register, name='register'),
+    url(r'^register/r/$', views.register, name='register'),
+    url(r'^about/', views.AboutView.as_view(), name='about')
 ]
 
 if settings.DEBUG:

@@ -95,4 +95,5 @@ ENV/
 .idea/
 
 # Images for licenzing reasons
-src/static/pictures/
+src/static/images/
+src/images

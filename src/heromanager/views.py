@@ -3,12 +3,12 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.base import TemplateView
 
 
 @csrf_exempt
 def register(request, success=None):
     if request.method == 'POST':
-        print("POSTING {}\n\n\n\n\n\n\n\n\n\n".format(request.POST))
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
@@ -20,3 +20,7 @@ def register(request, success=None):
     else:
         template = 'registration/registration_unsuccessful.html'
     return render(request, template, {})
+
+
+class AboutView(TemplateView):
+    template_name = 'about.html'
