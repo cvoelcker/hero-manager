@@ -93,3 +93,6 @@ ENV/
 
 # IDE
 .idea/
+
+# Images for licenzing reasons
+src/static/pictures/
