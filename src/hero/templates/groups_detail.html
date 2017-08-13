@@ -1,22 +1,121 @@
 {% extends "groups_base.html" %}
 
-{% block content %}
+{% load hero_tags %}
 
+{% block sidenav-content %}
+    <ul class="collapsible" data-collapsible="accordion">
+        {% for player in object.players.all %}
+            <li>
+                <div class="collapsible-header"><i
+                        class="material-icons">person_outline
+                </i>{{ player.username }}</div>
+                <div class="collapsible-body">
+                    <ul>
+                        <li>
+                            <a href="{% url "hero:profile" player=player.username %}">Player
+                                details</a>
+                        </li>
+                        {% if object.has_charsheets %}
+                            <li>
+                                <div class="divider"></div>
+                            </li>
+                            {% hero_set player group as hero_set %}
+                            {% for hero in hero_set %}
+                                <li>
+                                    <a href="{% url "hero:hero_overview" hero=hero.name group=object.name %}">{{ hero.name }}</a>
+                                </li>
+                                <li>
+                                    <a href="{% url "hero:character_sheet" hero=hero.name group=object.name %}">
+                                        <i class="material-icons left">filter_none</i>Character
+                                        sheet</a>
+                                </li>
+                                <li>
+                                    <a href="{% url "adventure:character_diary" hero=hero.name group=object.name %}">
+                                        <i class="material-icons left">import_contacts</i>
+                                        Character Diary</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
+{% block content %}
     <div class="row">
         <div class="col s4 m4">
             <h4>{{ object.name }}</h4>
         </div>
     </div>
-
     <div class="row">
         <div class="col s4 m4">
-            <ul class="collection">
-                {% for player in object.players.all %}
-                    <li class="collection-item">{{ player.username }}</li>
-                {% endfor %}
-            </ul>
+            <h5>Players</h5>
         </div>
     </div>
 
+    <div class="row">
+        {% for player in object.players.all %}
+            <div class="row">
+                <div class="col s4">
+                    <div class="card blue-grey darken-1 hoverable">
+                        <div class="card-content white-text">
+                            <span class="card-title">{{ player.username }}</span>
+                            <p>Starring as{% hero_set player group as heros %}
+                                {% for hero in heros %}
+                                    {{ hero.name }}{% endfor %}</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="">Player View</a>
+                        </div>
+                        <div class="card-action">
+                            <a href="">Character diary</a>
+                        </div>
+                        <div class="card-action">
+                            <a href="">Character sheet</a>
+                        </div>
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 %}
+                    </div>
+                    <div class="row">
 
+                {% endif %}
+
+        {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col s4 m4">
+                <h5>Adventures</h5>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for adventure in object.adventure_set.all %}
+                <div class="row">
+                    <div class="col s4">
+                        <div class="card blue-grey darken-1 hoverable">
+                            <div class="card-content white-text">
+                                <span class="card-title">{{ adventure.name }}</span>
+                                <p>{{ adventure.description }}</p>
+                            </div>
+                            <div class="card-action">
+                                <a href="">Adventure diaries</a>
+                            </div>
+                            <div class="card-action">
+                                <a href="">Adventure Files</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% if forloop.counter|divisibleby:3 %}
+                        </div>
+                        <div class="row">
+
+                    {% endif %}
+
+            {% endfor %}
+
+            </div>
 {% endblock %}

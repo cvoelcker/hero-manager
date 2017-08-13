@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from hero import settings
+from . import xml_hero
 
 
 class Group(models.Model):
@@ -16,7 +16,7 @@ class Group(models.Model):
 
     rule_version = models.CharField(
         max_length=20,
-        choices=settings.RULES_SUPPORTED,
+        choices=xml_hero.RULES_SUPPORTED,
         default='DEFAULT',
     )
 
@@ -38,6 +38,9 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+    def has_charsheets(self):
+        return xml_hero.has_charsheet(self.rule_version)
+
 
 class Hero(models.Model):
     """
@@ -45,11 +48,14 @@ class Hero(models.Model):
     be owned by a player.
     """
 
+    class Meta:
+        unique_together = ('group', 'name')
+
     name = models.CharField(max_length=200)
     player = models.ForeignKey(User, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
-    char_sheet = models.TextField(
+    char_sheet = models.FileField(
         null=True,
         blank=True
     )
@@ -57,28 +63,5 @@ class Hero(models.Model):
     def __str__(self):
         return self.name
 
-
-class Diary(models.Model):
-    """
-    The diary of a hero stores all the things s*he has witnessed in his*her life.
-    """
-
-    owner = models.ForeignKey(Hero, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.owner.object.name + ' Tagebuch'
-
-
-class DiaryEntry(models.Model):
-    """
-    An entry into a diary
-    """
-
-    diary = models.ForeignKey(Diary, on_delete=models.CASCADE)
-    date_registered = models.DateTimeField(
-        'date added',
-        default=timezone.now)
-    name = models.CharField(max_length=200)
-    date = models.IntegerField('in game date')
-
-    entry = models.TextField("Eintrag")
+    def get_char_sheet(self):
+        return xml_hero.get_hero(self.group.rule_version, self.char_sheet)

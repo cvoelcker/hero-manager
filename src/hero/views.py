@@ -1,11 +1,13 @@
-from django.http import HttpResponse
-from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, DetailView, FormView
-from django.views.generic.base import TemplateView
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, DetailView, FormView, CreateView, \
+    UpdateView
+from django.views.generic.base import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from hero.models import Group
-from hero.forms import GroupForm
+
+from . import xml_hero
+from .models import Group, Hero
+from .forms import GroupForm, HeroAddForm, CharsheetUploadForm
 
 
 # Create your views here.
@@ -33,7 +35,14 @@ class GroupDetailView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         if queryset is None:
             queryset = self.get_queryset()
-        return queryset.get(name=self.kwargs['name'])
+        return queryset.get(name=self.kwargs['group'])
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.user.hero_set.filter(group=self.object).exists():
+            return super(GroupDetailView, self).render_to_response(context)
+        else:
+            return redirect(
+                reverse_lazy('hero:group_add_hero', kwargs=self.kwargs))
 
 
 class GroupAdminView(LoginRequiredMixin, DetailView):
@@ -48,26 +57,76 @@ class GroupAdminView(LoginRequiredMixin, DetailView):
         return context
 
 
-class GroupAddView(LoginRequiredMixin, FormView):
+class GroupAddView(LoginRequiredMixin, CreateView):
     template_name = 'groups_add.html'
     form_class = GroupForm
-    success_url = reverse_lazy('hero:group_add_success')
+
+    def get_success_url(self):
+        return reverse_lazy('hero:group_detail', args=(self.object.name,))
 
 
-class GroupSuccessView(LoginRequiredMixin, TemplateView):
+class PlayerDetailView(LoginRequiredMixin, DetailView):
     pass
 
 
-@login_required
-def index(request):
-    return HttpResponse("Hello World. You are at the hero index")
+class GroupAddHeroView(LoginRequiredMixin, CreateView):
+    template_name = "groups_add_hero.html"
+    form_class = HeroAddForm
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateView, self).get_context_data(**kwargs)
+        context['group_name'] = self.kwargs['group']
+        return context
+
+    def get_success_url(self):
+        return reverse('hero:group_detail', args=(self.kwargs['group'],))
 
 
-@login_required
-def diaries_list(request):
+class ProfileView(LoginRequiredMixin, DetailView):
     pass
 
 
-@login_required
-def profile(request):
+class HeroCharsheetView(DetailView):
+    model = Hero
+    template_name = "hero_charsheet.html"
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        return queryset.get(name=self.kwargs['hero'],
+                            group=self.kwargs['group'])
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        try:
+            context['charsheet'] = xml_hero.get_hero(
+                self.object.group.rule_version,
+                self.object.char_sheet.read())
+        finally:
+            return context
+
+    def get(self, request, *args, **kwargs):
+        if not self.get_object().char_sheet:
+            self.template_name = "no_charsheet.html"
+        return super(HeroCharsheetView, self).get(self, request, *args,
+                                                  **kwargs)
+
+
+class GroupHeroView(LoginRequiredMixin, DetailView):
     pass
+
+
+class HeroAddCharsheetView(LoginRequiredMixin, UpdateView):
+    model = Hero
+    fields = ['char_sheet']
+    template_name = 'charsheet_upload.html'
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        return queryset.get(name=self.kwargs['hero'],
+                            group=self.kwargs['group'])
+
+    def get_success_url(self):
+        print(self.kwargs['group'])
+        return reverse('hero:group_detail', args=(self.kwargs['group'],))

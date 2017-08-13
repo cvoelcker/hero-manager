@@ -1,0 +1,93 @@
+{% extends "groups_detail.html" %}
+{% block content %}
+    <div class="container z-depth-1">
+        <div class="row">
+            <div class="col s12">
+                <h3>{{ charsheet.name }}</h3>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3 m3">
+                Species: {{ charsheet.species }}
+            </div>
+            <div class="col s3 m3">
+                Gender: {{ charsheet.gender }}
+            </div>
+            <div class="col s3 m3">
+                Height: {{ charsheet.height }}
+            </div>
+            <div class="col s3 m3">
+                Age: {{ charsheet.age }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3 m3">
+                Culture: {{ charsheet.culture }}
+            </div>
+            <div class="col s9 m93">
+                Class: {% for ed in charsheet.education %}
+                {{ ed }} {% endfor %}
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="row">
+            <div class="col s3 m3">
+                <h5>Attributes</h5>
+            </div>
+            <div class="col s3 m3">
+                <h5>Advantages & Disadvantages</h5>
+            </div>
+            <div class="col s3 m3">
+                <h5>Special Abilities</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3">
+                {% for attribute_value in charsheet.attributes %}
+                    <p>{{ attribute_value.0 }}: {{ attribute_value.1 }}</p>{% endfor %}
+            </div>
+            <div class="col s3">
+                {% for adv in charsheet.adv %}
+                    <p>{{ adv.0 }}{% if adv.1 %}:
+                        {{ adv.1 }}{% endif %}</p>{% endfor %}
+            </div>
+            <div class="col s3">
+                {% for special_abilities in charsheet.special_abilities %}
+                    <p>{{ special_abilities }}</p>{% endfor %}
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="row">
+            <div class="col s6">
+                <h5>Talents</h5>
+            </div>
+            <div class="col s6">
+                <h5>Spells</h5>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col s6">
+                {% for talent in charsheet.talents %}
+                    <div class="row">
+                        <div class="col s4">{{ talent.0 }}</div>
+                        <div class="col s4">{{ talent.1 }}</div>
+                        <div class="col s4">{{ talent.2 }}</div>
+                    </div>
+
+                {% endfor %}
+            </div>
+            <div class="col s6">
+                {% for talent in charsheet.spells %}
+                    <div class="row">
+                        <div class="col s4">{{ talent.0 }}</div>
+                        <div class="col s4">{{ talent.1 }}</div>
+                        <div class="col s4">{{ talent.2 }}</div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

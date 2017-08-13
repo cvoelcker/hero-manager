@@ -2,11 +2,27 @@ import xml.etree.ElementTree as ET
 import pickle
 
 
-class Hero():
-    def __init__(self, xml):
-        root = ET.fromstring(xml)
+class XMLNotSupportedException(Exception):
+    def __init__(self, rule_version):
+        self.rule_version = rule_version
 
-        hero = root.find('held')
+
+class SettingNotSupportedException(Exception):
+    def __init__(self, rule_version):
+        self.rule_version = rule_version
+
+
+class Hero:
+    name = ""
+
+    def __init__(self, xml):
+        self.root = ET.fromstring(xml)
+
+
+class DSA4Hero(Hero):
+    def __init__(self, xml):
+        Hero.__init__(self, xml)
+        hero = self.root.find('held')
 
         self.name = hero.attrib['name']
 
@@ -33,35 +49,55 @@ class Hero():
         self.free_ap = basis.find('abenteuerpunkte').attrib['value']
 
         # get attributes
-        self.attributes = dict(
+        self.attributes = [
             (attribute.attrib['name'], attribute.attrib['value']) for attribute
-            in list(attributes))
+            in list(attributes)]
 
         # get advantages and disadvantages
-        self.adv = {}
-        for adv in list(advantages):
-            self.adv[adv.attrib['name']] = adv.attrib[
-                'value'] if 'value' in adv.keys() else None
+        self.adv = [(adv.attrib['name'], adv.attrib[
+            'value'] if 'value' in adv.keys() else None) for adv in
+                    list(advantages)]
 
         # get all special abilities
         self.special_abilities = [sf.attrib['name'] for sf in
                                   list(special_abilities)]
 
         # get all talents
-        self.talents = dict((talent.attrib['name'],
-                             (talent.attrib['value'], talent.attrib['probe']))
-                            for talent in list(talents))
+        self.talents = [(talent.attrib['name'], talent.attrib['probe'],
+                         talent.attrib['value'])
+                        for talent in list(talents)]
 
         # get all spells
-        self.spells = dict((spell.attrib['name'],
-                            (spell.attrib['value'], spell.attrib['probe'])) for
-                           spell in list(spells))
+        self.spells = [(spell.attrib['name'], spell.attrib['probe'],
+                        spell.attrib['value']) for
+                       spell in list(spells)]
 
     def get_hero(self):
         return vars(self)
 
-    def get_dump(self):
-        return pickle.dumps(self, -1)
 
-    def load_dump(string):
-        return pickle.loads(string)
+RULES_SUPPORTED = (
+    ('DSA4', 'Das Schwarze Auge, v4.1'),
+    ('SPLITTERMOND', 'Splittermond'),
+    ('GENERAL', 'Generic setting'),
+)
+
+
+def has_charsheet(rule_version):
+    if rule_version in ['DSA4']:
+        return True
+    elif rule_version in ['SPLITTERMOND', 'GENERAL']:
+        return False
+    else:
+        raise SettingNotSupportedException(rule_version)
+
+
+def get_hero(rule_version, xml):
+    if rule_version == 'DSA4':
+        return DSA4Hero(xml).get_hero()
+    elif rule_version == 'SPLITTERMOND':
+        raise XMLNotSupportedException(rule_version)
+    elif rule_version == 'GENERAL':
+        raise XMLNotSupportedException(rule_version)
+    else:
+        raise SettingNotSupportedException(rule_version)
