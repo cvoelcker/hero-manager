@@ -1,0 +1,32 @@
+{% extends "groups_detail.html" %}
+
+{% block content %}
+    <script class="javascript">
+        $(document).ready(function () {
+            $('.modal').modal();
+            $('#modal1').modal('open');
+
+        });
+    </script>
+
+    <!-- Modal Trigger -->
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Hero character sheet not found</h4>
+            <p>There seems to be no character sheet for this hero. Please
+                upload an xml file.</p>
+        </div>
+        <div class="modal-footer">
+            <a href="{% url "hero:upload_char_sheet" hero=hero group=hero.group %}"
+               class="modal-action modal-close waves-effect waves-green btn-flat">Upload a character file</a>
+
+            <a href="{% url "hero:group_detail" group=hero.group %}"
+               class="modal-action modal-close waves-effect waves-green btn-flat">Back
+                to the group</a>
+        </div>
+    </div>
+
+    Sorry, no character sheet has been uploaded
+{% endblock content %}
+

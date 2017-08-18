@@ -14,17 +14,12 @@
     <link rel="stylesheet"
           href="{% static "materialize-css/dist/css/materialize.min.css" %}">
     <style type="text/css">
-        {% if user.is_authenticated %}
-            .wrapper {
-                padding-left: 270px;
-                padding-top: 2%
-            }
-        {% endif %}
-
         .side-nav {
             top: 65px;
             width: 250px;
         }
+        {% block style-inlcudes %}
+        {% endblock %}
     </style>
 
     {% block header-includes %}
@@ -33,46 +28,41 @@
 
 <body>
 
-<nav>
-    <div class="nav-wrapper">
-        <a class="brand-logo">HeroManager</a>
-        <ul class="right hide-on-med-and-down">
-            {% if user.is_authenticated %}
-                <!--<li><a href="">General Forums</a></li>-->
-                <li><a href="{% url "hero:groups" %}">My Groups</a></li>
-                <li><a href="{% url "hero:profile" %}">My Profile</a></li>
-                <li><a href="{% url "logout" %}">Logout</a></li>
-            {% else %}
-                <li><a href="{% url "login" %}">Login</a></li>
-                <li><a href="{% url "register" %}">Register</a></li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
+<div class="navbar-fixed">
 
-{% if user.is_authenticated %}
-    <script>
-        $(document).ready(function () {
-            // Open
-            $('.collapsible').collapsible('close', 0);
-            // Close
-        });
-    </script>
-    <ul id="slide-out" class="side-nav fixed">
-        {% block side_bar %}
-        {% endblock %}
-    </ul>
-
-    <div class="wrapper">
-        <div style="padding-left: 5%; padding-top: 1%">
-            {% block content %}
-            {% endblock %}
+    <nav>
+        <div class="nav-wrapper blue-grey darken-1">
+        <div class="row">
+            <div class="col s12 m6"><a class="brand-logo">HeroManager</a>
+            </div>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{% url "about" %}">About</a></li>
+                {% if user.is_authenticated %}
+                    <!--<li><a href="">General Forums</a></li>-->
+                    {% if user.is_staff %}
+                        <li><a href="{% url "admin:index" %}">Admin Area</a>
+                        </li>
+                    {% endif %}
+                    <li><a href="{% url "hero:groups" %}">My Groups</a></li>
+                    <li><a href="#">My Profile</a></li>
+                    <li><a href="{% url "logout" %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url "login" %}">Login</a></li>
+                    <li><a href="{% url "register" %}">Register</a></li>
+                {% endif %}
+            </ul>
         </div>
-    </div>
-{% endif %}
+        </div>
+    </nav>
+</div>
 
-{% block general_content %}
+{% block sidebar %}
 {% endblock %}
+
+<div class="wrapper">
+    {% block content %}
+    {% endblock %}
+</div>
 
 <!--
 <footer style="position:fixed;left:0px;bottom:0px;width:100%"

@@ -1,32 +1,33 @@
 {% extends "base.html" %}
 
-{% block content %}
-    It works
+{% block style-inlcudes %}
+    .wrapper {
+    padding-left: 250px;
+    }
 {% endblock %}
 
-{% block side_bar %}
+{% block sidebar %}
+    <script>
+        $(document).ready(function () {
+            // Open
+            $('.collapsible').collapsible('close', 0);
+            // Close
+        });
+    </script>
+
+    <ul id="slide-out" class="side-nav fixed">
         <ul class="collapsible" data-collapsible="expandable">
             <li>
-                <div class="collapsible-header">First</div>
-                <div class="collapsible-body">
-                    <ul>
-                        <li><a href="{% url "register" %}">Test</a></li>
-                        <li><a href="{% url "register" %}">Test</a></li>
-                        <li><a href="{% url "register" %}">Test</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li>
+
+                <ul>
+                    <li><a href="{% url "hero:groups" %}">Groups Overview</a>
+                    </li>
+
+                </ul>
                 <div class="divider"></div>
-            </li>
-            <li>
-                <div class="collapsible-header">Second</div>
-                <div class="collapsible-body">
-                    <span>Lorem ipsum dolor sit amet.</span></div>
-            </li>
-            <li>
-                <div class="divider"></div>
-            </li>
+                {% block sidenav-content %}
+                {% endblock %}
         </ul>
+    </ul>
 
 {% endblock %}

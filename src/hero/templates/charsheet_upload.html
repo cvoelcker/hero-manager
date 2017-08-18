@@ -1,0 +1,15 @@
+{% extends "groups_detail.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h4>Upload a character sheet for "{{ hero }}"</h4>
+        </div>
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input class="waves-effect waves-light btn" type="submit"
+                   value="Upload"/>
+        </form>
+    </div>
+{% endblock content %}

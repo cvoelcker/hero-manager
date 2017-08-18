@@ -1,0 +1,38 @@
+{% extends 'groups_base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+        </div>
+        <div class="row">
+            <div class="column s6 m12">
+                <script>
+                    $(document).ready(function () {
+                        $('select').material_select();
+                    });
+
+                </script>
+                <div class="row">
+
+                    <h3>Create a hero</h3>
+                    <p>You do not have a hero for the group "{{ group_name }}"
+                        yet. You need to create one before you can do anything
+                        else.
+                    </p>
+                    <p></p>
+                </div>
+
+                <form method="POST"
+                      action=""
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_ul }}
+                    <input class="waves-effect waves-light btn" type="submit"
+                           value="Create new hero"/>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
