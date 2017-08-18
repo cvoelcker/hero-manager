@@ -8,6 +8,9 @@ class Adventure(models.Model):
 
     """
 
+    class Meta:
+        unique_together = ('group', 'name')
+
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     ongoing = models.BooleanField(default=False)
 
@@ -17,11 +20,17 @@ class Adventure(models.Model):
 
     description = models.TextField()
 
+    def __str__(self):
+        return self.name
+
 
 class DiaryEntry(models.Model):
     """
     An entry into a diary
     """
+
+    class Meta:
+        ordering = ('adventure', 'date')
 
     hero = models.ForeignKey(Hero, on_delete=models.CASCADE)
     adventure = models.ForeignKey(Adventure, on_delete=models.SET_NULL,
@@ -33,3 +42,13 @@ class DiaryEntry(models.Model):
     date = models.IntegerField('in game date')
 
     entry = models.TextField('entry')
+
+    def __str__(self):
+        if self.name:
+            return self.name
+        else:
+            return "{}: {} {}".format(
+                str(self.adventure),
+                str(self.hero),
+                self.date
+            )

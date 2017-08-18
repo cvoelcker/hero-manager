@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, FormView, CreateView, \
@@ -61,6 +62,18 @@ class GroupAddView(LoginRequiredMixin, CreateView):
     template_name = 'groups_add.html'
     form_class = GroupForm
 
+    def form_valid(self, form):
+        group = Group(
+            name=form.cleaned_data['name'],
+            rule_version=form.cleaned_data['rule_version'],
+            players=form.cleaned_data['players'],
+            description=form.cleaned_data['description'],
+            game_master=self.request.user
+
+        )
+        group.save()
+        return HttpResponseRedirect(self.get_success_url())
+
     def get_success_url(self):
         return reverse_lazy('hero:group_detail', args=(self.object.name,))
 
@@ -77,6 +90,17 @@ class GroupAddHeroView(LoginRequiredMixin, CreateView):
         context = super(CreateView, self).get_context_data(**kwargs)
         context['group_name'] = self.kwargs['group']
         return context
+
+    def form_valid(self, form):
+        group = Group.objects.get(name=self.kwargs['group'])
+        hero = Hero(
+            name=form.cleaned_data['name'],
+            char_sheet=form.cleaned_data['char_sheet'],
+            player=self.request.user,
+            group=group
+        )
+        hero.save()
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse('hero:group_detail', args=(self.kwargs['group'],))

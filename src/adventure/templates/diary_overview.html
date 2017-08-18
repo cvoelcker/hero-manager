@@ -1,0 +1,45 @@
+{% extends "diary_base.html" %}
+
+{% load hero_tags %}
+
+{% block sidenav-content %}
+    <ul class="collapsible" data-collapsible="accordion">
+        {% for adventure in group.adventure_set.all %}
+
+            <li>
+                <div class="collapsible-header">{{ adventure.name }}</div>
+                <div class="collapsible-body">
+                    <ul class="collapsible" data-collapsible="accordion">
+                        {% for hero in group.hero_set.all %}
+                            <li>
+                                <div class="collapsible-header">
+                                    {{ hero }}
+                                </div>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        {% if adventure.ongoing %}
+                                            <li>
+                                                <a href="{% url "add_diary_entry" hero=hero adventure=adventure %}">
+                                                    <i class="material-icons">add</i> Add a new entry
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        {% for entry in hero.diaryentry_set.all %}
+                                            <li><a href="">{{ entry }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

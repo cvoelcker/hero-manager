@@ -9,7 +9,7 @@ class GroupForm(ModelForm):
 
     class Meta():
         model = Group
-        fields = ['name', 'rule_version', 'game_master', 'players',
+        fields = ['name', 'rule_version', 'players',
                   'description']
 
 
@@ -20,7 +20,7 @@ class HeroAddForm(ModelForm):
 
     class Meta():
         model = Hero
-        fields = ['name', 'player', 'group', 'char_sheet', ]
+        fields = ['name', 'char_sheet', ]
 
 class CharsheetUploadForm(Form):
     """

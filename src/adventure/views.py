@@ -1,30 +1,48 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, CreateView
 
 from .models import DiaryEntry, Adventure
+from hero.models import Group
 
 
-class DiaryView(LoginRequiredMixin, DetailView):
-    model = DiaryEntry
-    template_name = "diary_entry_view.html"
+class AdventureView(LoginRequiredMixin, DetailView):
+    model = Adventure
+    template_name = "adventure_overview.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        group = Group.objects.get(name=self.kwargs['group'])
+        context['group'] = group
+        return context
 
     def get_object(self, queryset=None):
         if queryset is None:
             queryset = self.get_queryset()
-        self.kwargs
-        return queryset.get(hero=self.kwargs[''])
+        group = Group.objects.get(name=self.kwargs['group'])
+        return queryset.get(group=group, name=self.kwargs['adventure'])
 
 
+class DiaryView(LoginRequiredMixin, ListView):
+    model = DiaryEntry
+    template_name = 'diary_overview.html'
 
-class AdventureView(LoginRequiredMixin, DetailView):
-    pass
+    def get_context_data(self, **kwargs):
+        context = super(ListView, self).get_context_data(**kwargs)
+        group = Group.objects.get(name=self.kwargs['group'])
+        context['group'] = group
+        return context
 
 
-class AdventureListView(LoginRequiredMixin, ListView):
-    pass
+class DiaryEntryView(LoginRequiredMixin, DetailView):
+    model = DiaryEntry
+    template_name = "diary_entry.html"
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        return queryset
 
 
-@login_required
-def diaries_list(request):
-    pass
+class AddDiaryEntryView(LoginRequiredMixin, CreateView):
+    model = DiaryEntry
+    template_name = 'add_diary_entry.html'
