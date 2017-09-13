@@ -52,3 +52,30 @@ class DiaryEntry(models.Model):
                 str(self.hero),
                 self.date
             )
+
+
+class NSCGroup(models.Model):
+    """
+    Models a group of NSCs united by concurrent
+    """
+
+    class Meta:
+        unique_together = ('adventure', 'name')
+
+    adventure = models.ForeignKey(Adventure)
+
+    name = models.TextField()
+    description = models.TextField()
+
+    color = models.CharField(max_length=7)
+
+
+class NSC(models.Model):
+    """
+
+    """
+
+    name = models.TextField()
+    description = models.TextField()
+
+    groups = models.ManyToManyField(NSCGroup)

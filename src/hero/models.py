@@ -12,7 +12,9 @@ class Group(models.Model):
 
     name = models.CharField(
         max_length=200,
-        primary_key=True)
+        primary_key=True,
+        unique=True
+    )
 
     rule_version = models.CharField(
         max_length=20,

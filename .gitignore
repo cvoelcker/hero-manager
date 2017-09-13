@@ -97,3 +97,4 @@ ENV/
 # Images for licenzing reasons
 src/static/images/
 src/images
+src/media
