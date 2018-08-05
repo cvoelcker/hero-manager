@@ -94,7 +94,9 @@ ENV/
 # IDE
 .idea/
 
-# Images for licenzing reasons
+# Images for licensing reasons
 src/static/images/
 src/images
 src/media
+
+src/node_modules
