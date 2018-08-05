@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
+from . import xml_hero
 
 class Group(models.Model):
     """
@@ -141,7 +143,7 @@ class NSCGroup(models.Model):
     """
 
     class Meta:
-        unique_together = ('adventure', 'name')
+        unique_together = ('group', 'name')
 
     group = models.ForeignKey(Group)
 

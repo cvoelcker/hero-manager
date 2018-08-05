@@ -14,7 +14,7 @@ from .forms import GroupForm, HeroAddForm, CharsheetUploadForm
 # Create your views here.
 
 class HomeView(TemplateView):
-    template_name = "base.html"
+    template_name = "home.html"
 
 
 class GroupView(LoginRequiredMixin, ListView):

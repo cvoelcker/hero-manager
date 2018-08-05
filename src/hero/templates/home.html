@@ -1,0 +1,9 @@
+{% extends base.html %}
+{% load hero_tags %}
+
+{% groups player as player_groups %}
+
+{% block groups %}
+{%for player_group in player_groups%}
+{{player_group}}
+{% endfor %}
