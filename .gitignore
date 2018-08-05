@@ -95,7 +95,8 @@ ENV/
 .idea/
 
 # Images for licensing reasons
-src/static/images/
+src/static
+src/static
 src/images
 src/media
 
