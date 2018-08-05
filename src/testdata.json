@@ -1,0 +1,23 @@
+[
+{
+    "model": "adventure.adventure",
+    "pk": 1,
+    "fields": {
+        "group": "My test group",
+        "ongoing": true,
+        "name": "Horasreich 101",
+        "date_started": "2017-08-13",
+        "description": "Wir spielen im Horasreich"
+    }
+},
+{
+    "model": "adventure.adventure",
+    "pk": 2,
+    "fields": {
+        "group": "My test group",
+        "ongoing": true,
+        "name": "Wildermark 1",
+        "date_started": "2017-08-13",
+        "description": "Ein tolles Abenteuer in Zweim\u00fchlen"
+    }
+}
