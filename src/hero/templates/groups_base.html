@@ -2,7 +2,7 @@
 
 {% block style-inlcudes %}
     .wrapper {
-    padding-left: 250px;
+    padding-left: 300px;
     }
 {% endblock %}
 
@@ -15,7 +15,23 @@
         });
     </script>
 
-    <ul id="slide-out" class="side-nav fixed">
+  <div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">
+              <span data-feather="home"></span>
+              Dashboard <span class="sr-only">(current)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+ <div id="sidebar-wrapper">
+    <ul id="slide-out" class="sidebar-nav">
         <ul class="collapsible" data-collapsible="expandable">
             <li>
 
@@ -29,5 +45,6 @@
                 {% endblock %}
         </ul>
     </ul>
+  </div>
 
 {% endblock %}

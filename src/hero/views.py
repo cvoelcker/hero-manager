@@ -39,11 +39,15 @@ class GroupDetailView(LoginRequiredMixin, DetailView):
         return queryset.get(name=self.kwargs['group'])
 
     def render_to_response(self, context, **response_kwargs):
-        if self.request.user.hero_set.filter(group=self.object).exists():
-            return super(GroupDetailView, self).render_to_response(context)
-        else:
+        user = self.request.user
+        print(self.object.players.all())
+        if user in self.object.players.all() and not user.hero_set.filter(
+                group=self.object).exists():
             return redirect(
                 reverse_lazy('hero:group_add_hero', kwargs=self.kwargs))
+
+        else:
+            return super(GroupDetailView, self).render_to_response(context)
 
 
 class GroupAdminView(LoginRequiredMixin, DetailView):
@@ -91,15 +95,14 @@ class GroupAddHeroView(LoginRequiredMixin, CreateView):
         context['group_name'] = self.kwargs['group']
         return context
 
+    def get_form_kwargs(self):
+        # pass "user" keyword argument with the current user to your form
+        kwargs = super(CreateView, self).get_form_kwargs()
+        kwargs['player'] = self.request.user
+        kwargs['group'] = Group.objects.get(name=self.kwargs['group'])
+        return kwargs
+
     def form_valid(self, form):
-        group = Group.objects.get(name=self.kwargs['group'])
-        hero = Hero(
-            name=form.cleaned_data['name'],
-            char_sheet=form.cleaned_data['char_sheet'],
-            player=self.request.user,
-            group=group
-        )
-        hero.save()
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
@@ -154,3 +157,82 @@ class HeroAddCharsheetView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         print(self.kwargs['group'])
         return reverse('hero:group_detail', args=(self.kwargs['group'],))
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.views.generic import DetailView, ListView, CreateView
+
+from .models import DiaryEntry, Adventure
+from hero.models import Group, Hero
+
+
+class AdventureView(LoginRequiredMixin, DetailView):
+    model = Adventure
+    template_name = "adventure_overview.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        group = Group.objects.get(name=self.kwargs['group'])
+        context['group'] = group
+        return context
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        group = Group.objects.get(name=self.kwargs['group'])
+        return queryset.get(group=group, name=self.kwargs['adventure'])
+
+
+class DiaryView(LoginRequiredMixin, ListView):
+    model = DiaryEntry
+    template_name = 'diary_overview.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ListView, self).get_context_data(**kwargs)
+        hero = Hero.objects.get(name=self.kwargs['hero'])
+        group = hero.group
+        context['group'] = group
+        return context
+
+
+class DiaryEntryView(LoginRequiredMixin, DetailView):
+    model = DiaryEntry
+    template_name = "diary_entry.html"
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        return queryset
+
+
+class AddDiaryEntryView(LoginRequiredMixin, CreateView):
+    model = DiaryEntry
+    fields = ('name', 'date', 'entry', 'hero')
+    template_name = 'add_diary_entry.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateView, self).get_context_data(**kwargs)
+        context['adventure'] = Adventure.objects.get(
+            name=self.kwargs['adventure'])
+        return context
+
+    def form_valid(self, form):
+        adventure = Adventure.objects.get(name=self.kwargs['adventure'])
+        diary_entry = DiaryEntry(
+            name=form.cleaned_data['name'],
+            date=form.cleaned_data['date'],
+            entry=form.cleaned_data['entry'],
+            hero=form.cleaned_data['hero'],
+            adventure=adventure,
+        )
+        diary_entry.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('adventure:hero_adventure_diary',
+                       args=(self.kwargs['hero'], self.kwargs['adventure']))

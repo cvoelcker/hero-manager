@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'hero.apps.HeroConfig',
-    'adventure.apps.AdventureConfig',
+    'heromanager',
     'django.forms',
     'django.contrib.admin',
     'django.contrib.auth',

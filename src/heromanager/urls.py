@@ -25,12 +25,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('^', include('django.contrib.auth.urls')),
     url(r'^', include('hero.urls')),
-    url(r'^diary/', include('adventure.urls')),
     url(r'^register/$', views.register, name='register'),
     url(r'^register/r/$', views.register, name='register'),
     url(r'^about/', views.AboutView.as_view(), name='about'),
-    url(r'^wiki', get_wiki_pattern()),
-    url(r'^notifications/', get_nyt_pattern()),
 ]
 
 if settings.DEBUG:
